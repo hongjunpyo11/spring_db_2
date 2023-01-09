@@ -5,24 +5,23 @@ import hello.itemservice.repository.ItemSearchCond;
 import hello.itemservice.repository.ItemUpdateDto;
 import hello.itemservice.repository.memory.MemoryItemRepository;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
 @SpringBootTest
 class ItemRepositoryTest {
 
     @Autowired
     ItemRepository itemRepository;
 
+/*
     @Autowired
     PlatformTransactionManager transactionManager;
     TransactionStatus status;
@@ -32,6 +31,7 @@ class ItemRepositoryTest {
         // 트랜잭션 시작
         status = transactionManager.getTransaction(new DefaultTransactionDefinition());
     }
+ */
 
     @AfterEach
     void afterEach() {
@@ -40,7 +40,7 @@ class ItemRepositoryTest {
             ((MemoryItemRepository) itemRepository).clearStore();
         }
         // 트랜잭션 롤백
-        transactionManager.rollback(status);
+        // transactionManager.rollback(status);
     }
 
     @Test
@@ -107,16 +107,11 @@ class ItemRepositoryTest {
     }
 }
 /**
- * 테스트에서 매우 중요한 원칙은 다음과 같다.
- * * 테스트는 다른 테스트와 격리해야 한다.
- * * 테스트는 반복해서 실행할 수 있어야 한다.
+ * 스프링은 테스트 데이터 초기화를 위해 트랜잭션을 적용하고 롤백하는 방식을 @Transactional
+ * 애노테이션 하나로 깔끔하게 해결해준다.
  *
- * 물론 테스트가 끝날 때 마다 추가한 데이터에 DELETE SQL 을 사용해도 되겠지만,
- * 이 방법도 궁극적인 해결책은 아니다.
- * 만약 테스트 과정에서 데이터를 이미 추가했는데, 테스트가 실행되는 도중에 예외가 발생하거나
- * 애플리케이션이 종료되어 버려서 테스트 종료 시점에 DELETE SQL 을 호출하지 못할 수 도 있다!
- * 그러면 결국 데이터가 남아있게 된다.
- *
- * 이런 문제를 어떻게 해결할 수 있을까?
- * 데이터 롤백!!
+ * 스프링이 제공하는 @Transactional 애노테이션은 로직이 성공적으로 수행되면 커밋하도록 동작한다.
+ * 그런데 @Transactional 애노테이션을 테스트에서 사용하면 아주 특별하게 동작한다.
+ * @Transactional 이 테스트에 있으면 스프링은 테스트를 트랜잭션 안에서 실행하고,
+ * 테스트가 끝나면 트랜잭션을 자동으로 롤백시켜 버린다!
  */
