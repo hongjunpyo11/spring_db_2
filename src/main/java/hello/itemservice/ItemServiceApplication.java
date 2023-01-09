@@ -31,6 +31,7 @@ public class ItemServiceApplication {
 		return new TestDataInit(itemRepository);
 	}
 
+/*
 	@Bean
 	@Profile("test")
 	public DataSource dataSource() {
@@ -42,15 +43,14 @@ public class ItemServiceApplication {
 		dataSource.setPassword("");
 		return dataSource;
 	}
+ */
 	/**
-	 * * @Profile("test")
-	 *   * 프로필이 test 인 경우에만 데이터소스를 스프링 빈으로 등록한다.
-	 *   * 테스트 케이스에서만 이 데이터소스를 스프링 빈으로 등록해서 사용하겠다는 뜻이다.
-	 * * dataSource()
-	 *   * jdbc:h2:mem:db : 이 부분이 중요하다. 데이터소스를 만들때 이렇게만 적으면 임베디드 모드(메모리 모드)로 동작하는 H2 데이터베이스를 사용할 수 있다.
-	 *   * DB_CLOSE_DELAY=-1 : 임베디드 모드에서는 데이터베이스 커넥션 연결이 모두 끊어지면 데이터베이스도 종료되는데, 그것을 방지하는 설정이다.
-	 *   * 이 데이터소스를 사용하면 메모리 DB를 사용할 수 있다.
+	 * spring.datasource.url , spring.datasource.username 를 사용하지 않도록 # 을 사용해서 주석처리 했다.
+	 * 이렇게 하면 데이터베이스에 접근하는 모든 설정 정보가 사라지게 된다.
+	 * 이렇게 별다른 정보가 없으면 스프링 부트는 임베디드 모드로 접근하는 데이터소스( DataSource )를 만들어서 제공한다.
+	 * 바로 앞서 우리가 직접 만든 데이터소스와 비슷하다 생각하면 된다.
 	 */
+
 
 
 }
