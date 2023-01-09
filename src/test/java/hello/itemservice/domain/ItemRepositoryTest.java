@@ -106,12 +106,3 @@ class ItemRepositoryTest {
         assertThat(result).containsExactly(items);
     }
 }
-/**
- * 스프링은 테스트 데이터 초기화를 위해 트랜잭션을 적용하고 롤백하는 방식을 @Transactional
- * 애노테이션 하나로 깔끔하게 해결해준다.
- *
- * 스프링이 제공하는 @Transactional 애노테이션은 로직이 성공적으로 수행되면 커밋하도록 동작한다.
- * 그런데 @Transactional 애노테이션을 테스트에서 사용하면 아주 특별하게 동작한다.
- * @Transactional 이 테스트에 있으면 스프링은 테스트를 트랜잭션 안에서 실행하고,
- * 테스트가 끝나면 트랜잭션을 자동으로 롤백시켜 버린다!
- */
